@@ -1,7 +1,9 @@
-import random
+import menu
 from pygame.math import Vector2
 import time
 import core
+import play
+import gameover
 
 def setup():
     print("Setup START---------")
@@ -11,10 +13,20 @@ def setup():
 
     core.memory("position", Vector2(400, 400))
     core.memory("vitesse", Vector2(-1,0))
+
+    core.memory("Etat",0)
     print("Setup END-----------")
 
 def run() :
+
     print("running")
+
+    if core.memory("Etat") == 0:
+        menu()
+    if core.memory("Etat") == 1:
+        play()
+    if core.memory("Etat") == 2:
+        gameover()
     #DEPLACEMENT
     core.memory("position",core.memory("position")+ core.memory("vitesse"))
 
