@@ -2,7 +2,6 @@ from menu import menu
 from pygame.math import Vector2
 import core
 from play2 import play2
-from pygame import Rect
 import random
 from gameover import gameover
 
@@ -16,7 +15,6 @@ def setup():
     core.memory("vitesse", Vector2(0, -1))
     core.memory("projectile", [])
     core.memory("asteroid", [])
-    core.memory("vasteroid", Vector2(random.randint(0, 10), random.randint(0, 10)))
     core.memory("pasteroid", Vector2(random.randint(50, 700), random.randint(50, 700)))
     core.memory("score", 0)
     core.memory("texture1", core.Texture("./BackgroundPlay.jpg", Vector2(0, 0), scaleSize=(800, 800)))

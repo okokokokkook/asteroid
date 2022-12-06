@@ -279,7 +279,7 @@ class Draw:
 
     def text(color, texte, position, taille, font):
         pygame.font.init()
-        myfont = pygame.font.SysFont(font,taille)
+        myfont = pygame.font.SysFont(font, taille)
         textsurface = myfont.render(texte, False, color)
         screen.blit(textsurface, position)
 

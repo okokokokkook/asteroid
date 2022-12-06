@@ -16,11 +16,12 @@ def CreationProjectiles():
     core.memory("projectile").append({"position": P, "vitesse": V, "rayon": R, "couleur": C, "startTime": St})
 
 def creationasteroid():
-    v = core.memory("vasteroid")
+    v = core.memory("vitesse")
+    v.scale_to_length(core.memory("vitesse").length() + 8)
     p = core.memory("pasteroid")
     h = Rect(random.randint(50, 700), random.randint(50, 700), 90, 90)
     st = time.time()
-    core.memory("asteroid").append({"vitesse": v,"position": p, "startTime": st, "hitbox": h})
+    core.memory("asteroid").append({"vitesse": v, "position": p, "startTime": st, "hitbox": h})
 
 
 def play2():
