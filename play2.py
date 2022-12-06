@@ -15,11 +15,25 @@ def CreationProjectiles():
     St = time.time()
     core.memory("projectile").append({"position": P, "vitesse": V, "rayon": R, "couleur": C, "startTime": St})
 
+def creationasteroid():
+    v = core.memory("vasteroid")
+    p = core.memory("pasteroid")
+    h = Rect(random.randint(50, 700), random.randint(50, 700), 90, 90)
+    st = time.time()
+    core.memory("asteroid").append({"vitesse": v,"position": p, "startTime": st, "hitbox": h})
+
 
 def play2():
 
     core.cleanScreen()
 
+    #FOND
+
+    core.cleanScreen()
+    if not core.memory("texture1").ready:
+        core.memory("texture1").load()
+
+    core.memory("texture1").show()
 
     #VAISSEAU
 
@@ -59,10 +73,10 @@ def play2():
     Px = (core.memory("position").x)
 
     if Px < 0:
-        core.memory("position", (900, Py))
+        core.memory("position", (800, Py))
 
     if Py < 0:
-        core.memory("position", (Px, 900))
+        core.memory("position", (Px, 800))
 
     if Py > 900:
         core.memory("position", (Px, 0))
@@ -105,21 +119,42 @@ def play2():
 
     #ASTEROIDES
 
-    core.Draw.rect((150, 50, 0), (core.memory("asteroid")))
+    for ast in core.memory("asteroid"):
+        core.memory("texture3", core.Texture("./Asteroid.png", ast["hitbox"]))
+        if not core.memory("texture3").ready:
+            core.memory("texture3").load()
+
+        core.memory("texture3").show()
+    if len(core.memory("asteroid")) == 0:
+        creationasteroid()
+    else:
+        if time.time() - core.memory("asteroid")[-1]["startTime"] > 2:
+            creationasteroid()
+
+    for ast in core.memory("asteroid"):
+        if time.time() - ast["startTime"] > 6:
+            core.memory("asteroid").remove(ast)
 
     #COLISIONS
 
-    for proj in core.memory("projectile"):
-        if core.memory("asteroid").collidepoint(proj["position"].x, proj["position"].y):
-            core.memory("asteroid", Rect(random.randint(50, 700), random.randint(50, 700), random.randint(30, 70), random.randint(30, 70)))
-            core.memory("projectile").remove(proj)
-            core.memory("score", core.memory("score") + 1)
+    for ast in core.memory("asteroid"):
+        for proj in core.memory("projectile"):
+            if ast["hitbox"].collidepoint(proj["position"].x, proj["position"].y):
+                core.memory("asteroid").remove(ast)
+                core.memory("projectile").remove(proj)
+                core.memory("score", core.memory("score") + 1)
 
     for ast in core.memory("asteroid"):
-        if core.memory("asteroid").collidepoint(Px, Py):
-            core.memory("asteroid", Rect(random.randint(50, 700), random.randint(50, 700), random.randint(30, 70),random.randint(30, 70)))
-            core.memory("Etat", 2)
-            core.memory("position", Vector2(400, 400))
-            core.memory("vitesse", Vector2(0, -1))
+        if ast["hitbox"].collidepoint(Px, Py):
+            core.memory("asteroid").remove(ast)
+            core.memory("vies", core.memory("vies") - 1)
 
-    core.Draw.text((255, 255, 255), "score :" + str(core.memory("score")), (20, 20), 30, "Monotxt")
+    if core.memory('vies') == 0:
+        core.memory("position", Vector2(400, 400))
+        core.memory("vitesse", Vector2(0, -1))
+
+        core.memory("vies", 3)
+        core.memory("Etat", 2)
+
+    core.Draw.text((255, 255, 255), "SCORE :" + str(core.memory("score")), (20, 20), 30, "Monotxt")
+    core.Draw.text((255, 255, 255), "VIES :" + str(core.memory("vies")), (20, 60), 30, "Monotxt")
